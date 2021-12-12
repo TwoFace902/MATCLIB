@@ -3,21 +3,7 @@
 #include <math.h>
 #include "matrixlib.h"
 
-matrix_t* matinit(int r, int c){
-  matrix_t* mat = malloc(sizeof(matrix_t));
-  int* seed = calloc(r*c,sizeof(int));
-  int** feed = malloc(r*sizeof(int*));
-
-  for(int i = 0; i < r; i++){
-    feed[i] = seed + i * c;
-  }
-  mat->rows = r;
-  mat->cols = c;
-  mat->matrix = feed;
-  return mat;
-}
-
-matrix_t* matones(int r, int c){
+matrix_t* matinit(int r, int c, int val){
   matrix_t* mat = malloc(sizeof(matrix_t));
   int* seed = calloc(r*c,sizeof(int));
   int** feed = malloc(r*sizeof(int*));
@@ -27,16 +13,13 @@ matrix_t* matones(int r, int c){
   }
   for(int i = 0; i < r; i++){
     for(int j = 0; j < c; j++){
-      feed[i][j] = 1;
+      feed[i][j] = val;
     }
   }
   mat->rows = r;
   mat->cols = c;
   mat->matrix = feed;
   return mat;
-}
-void matfree(matrix_t* mat){
-  free(mat->matrix);
 }
 
 int matprint(matrix_t* mat){
@@ -47,7 +30,7 @@ int matprint(matrix_t* mat){
     printf("\n");
   }
   printf("\n");
-  return 1;
+  return 0;
 }
 
 matrix_t* matiden(int s){
@@ -66,7 +49,10 @@ matrix_t* matiden(int s){
 }
 
 int matcpy(matrix_t* dest, matrix_t* src){
-  matrix_t* mat = matinit(dest->rows,dest->cols);
+  if(dest == src){
+    return 0;
+  }
+  matrix_t* mat = matinit(dest->rows,dest->cols,0);
   if(dest->rows < src->rows || dest->cols < src->cols)
     return -1;
   for(int i = 0; i < src->rows; i++){
@@ -76,5 +62,54 @@ int matcpy(matrix_t* dest, matrix_t* src){
   }
   matfree(dest);
   dest->matrix = mat->matrix;
-  return 1;
+  return 0;
+}
+
+int matmult(matrix_t* dest, matrix_t* a, matrix_t* b){
+  if(a->cols != b->rows){
+    return -1;
+  }
+  matrix_t* mat = matinit(a->rows,b->cols,0);
+  for (int i = 0; i < a->rows; i++){
+    for (int j = 0; j < b->cols; j++){
+      int dot = 0;
+      for(int s = 0; s < a->cols; s++){
+        dot += a->matrix[i][s] * b->matrix[s][j];
+      }
+      mat->matrix[i][j] = dot;
+    }
+  }
+  matreplace(dest,mat);
+  return 0;
+}
+
+int matpow(matrix_t* dest, matrix_t* src, int p){
+  if(src->rows != src->cols)
+    return -1;
+  matrix_t* tmp = matinit(src->rows,src->cols,0);
+  matcpy(tmp,src);
+  matrix_t* mat = matiden(src->rows);
+  while (p != 0){
+    int curr = p & 1;
+    p = p >> 1;
+    if(curr){
+      matmult(mat,mat,tmp);
+    }
+    matmult(tmp,tmp,tmp);
+  }
+  matreplace(dest,mat);
+  return 0;
+}
+
+void matreplace(matrix_t* dest, matrix_t* src){
+  if(dest == src)
+    return;
+  matfree(dest);
+  dest->matrix = src->matrix;
+  dest->rows = src->rows;
+  dest->cols = src->cols;
+}
+
+void matfree(matrix_t* mat){
+  free(mat->matrix);
 }
