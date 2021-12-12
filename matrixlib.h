@@ -1,6 +1,9 @@
 #ifndef MATLIB_H
 #define MATLIB_H
 
+//Change int to desired type.
+typedef int datatype;
+
 typedef struct Matrix{
   int** matrix;
   int rows;
@@ -41,4 +44,10 @@ int matpow(matrix_t* dest, matrix_t* src, int pow);
 
 //Helper function to replace a matrix with another in case we are overwriting.
 void matreplace(matrix_t* dest, matrix_t* src);
+
+//Copy an entire row of src into dest, starting at index "start".
+int matcpyrow(matrix_t* dest, matrix_t* src, int row, int start);
+
+//Copy an entire column of src into dest, starting at index "start".
+int matcpycol(matrix_t* dest, matrix_t* src, int col, int start);
 #endif

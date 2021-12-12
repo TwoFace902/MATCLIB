@@ -113,3 +113,23 @@ void matreplace(matrix_t* dest, matrix_t* src){
 void matfree(matrix_t* mat){
   free(mat->matrix);
 }
+
+int matcpyrow(matrix_t* dest, matrix_t* src, int row, int start){
+  if(dest->cols < src->cols + start){
+    return -1;
+  }
+  for(int i = start; i < src->cols; i++){
+    dest->matrix[row][i] = src->matrix[row][i];
+  }
+  return 0;
+}
+
+int matcpycol(matrix_t* dest, matrix_t* src, int col, int start){
+  if(dest->rows < src->rows + start){
+    return -1;
+  }
+  for(int i = start; i < src->rows; i++){
+    dest->matrix[i][col] = src->matrix[i][col];
+  }
+  return 0;
+}
