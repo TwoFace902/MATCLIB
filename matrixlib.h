@@ -50,4 +50,6 @@ int matcpyrow(matrix_t* dest, matrix_t* src, int row, int start);
 
 //Copy an entire column of src into dest, starting at index "start".
 int matcpycol(matrix_t* dest, matrix_t* src, int col, int start);
+
+#include "matrixlib.c"
 #endif
