@@ -51,5 +51,8 @@ int matcpyrow(matrix_t* dest, matrix_t* src, int row, int start);
 //Copy an entire column of src into dest, starting at index "start".
 int matcpycol(matrix_t* dest, matrix_t* src, int col, int start);
 
+//Does the whole transpose thing. Pretty cool, huh. TODO: Implement dest so that we can replace src by itself. Use temp variables to do so.
+matrix_t* mattranspose(matrix_t* src);
+
 #include "matrixlib.c"
 #endif

@@ -134,11 +134,12 @@ int matcpycol(matrix_t* dest, matrix_t* src, int col, int start){
   return 0;
 }
 
-int mattranspose(matrix_t* dest, matrix_t* src){
+matrix_t* mattranspose(matrix_t* src){
+  matrix_t* dest = matinit(src->cols,src->rows,0);
    for (int j = 0; j < src->cols; j++){
       for(int i = 0; i < src->rows; i++){
-         dest->matrix[i][j] = src->matrix[j][i];
+         dest->matrix[j][i] = src->matrix[i][j];
       }
    }
-   return 0;
+   return dest;
 }

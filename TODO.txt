@@ -1,0 +1,4 @@
+1. Add transposes!
+2. Add backslash operator.
+
+3. Add some more goodies idk
